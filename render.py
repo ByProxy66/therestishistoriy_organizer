@@ -10,9 +10,14 @@ def short(s, n=240):
     return s if len(s) <= n else s[:n].rsplit(" ", 1)[0] + "…"
 
 
+# Apple Podcasts IDs (made by apple.py). Missing file = no Apple links, page still works.
+apple_path = ROOT / "apple_ids.json"
+APPLE = json.loads(apple_path.read_text()) if apple_path.exists() else {}
+
+
 def ep(e):
     return {"n": e.get("number"), "p": e.get("part"), "t": e["title"], "d": e["date"][:10],
-            "x": short(e["description"]), "a": e.get("audio"),
+            "x": short(e["description"]), "a": e.get("audio"), "ap": APPLE.get(e["guid"]),
             "m": round(int(e["duration"]) / 60) if (e.get("duration") or "").isdigit() else None}
 
 

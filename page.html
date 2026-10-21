@@ -55,6 +55,8 @@ ol.eps { list-style: none; margin: 0 0 18px; padding: 0 4px; display: grid; gap:
 .ep .em { font: 12px var(--mono); color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
 .ep a { color: var(--accent); font-weight: 500; text-decoration: none; border: 1px solid currentColor; border-radius: 999px; padding: 3px 12px; }
 .ep a:active { background: var(--accent-soft); }
+.ep a.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.ep a.quiet { border-color: var(--line); color: var(--muted); }
 .row > button:active { background: var(--surface); }
 .solo .row > button { grid-template-columns: 56px 1fr auto; }
 .solo .num { font: 13px var(--mono); color: var(--muted); }
@@ -124,7 +126,13 @@ $("#foot").textContent = "Lyd afspilles fra podcastens eget feed. Navne markeret
 function epHTML(e, i) {
   return `<li class="ep"><span class="pn">${e.p ? String(e.p).padStart(2,"0") : "·"}</span><div>
     <div class="et">${esc(e.t)}</div><p>${esc(e.x)}</p>
-    <div class="em"><span>${fmt(e.d)}</span>${e.m ? `<span>${e.m} min</span>` : ""}${e.a ? `<a href="${esc(e.a)}" target="_blank" rel="noopener">Lyt ↗</a>` : ""}</div></div></li>`;
+    <div class="em"><span>${fmt(e.d)}</span>${e.m ? `<span>${e.m} min</span>` : ""}${listen(e)}</div></div></li>`;
+}
+// Apple Podcasts link opens the Podcasts app on iPhone/Mac. Otherwise fall back to the raw audio file.
+function listen(e) {
+  const apple = e.ap ? `<a class="primary" href="https://podcasts.apple.com/podcast/id1537788786?i=${e.ap}" target="_blank" rel="noopener">Apple Podcasts ↗</a>` : "";
+  const mp3 = e.a ? `<a class="${e.ap ? "quiet" : ""}" href="${esc(e.a)}" target="_blank" rel="noopener">${e.ap ? "MP3" : "Lyt ↗"}</a>` : "";
+  return apple + mp3;
 }
 function match(q, ...xs) { return !q || xs.some(x => (x||"").toLowerCase().includes(q)); }
 

@@ -31,6 +31,7 @@ jobs:
       - run: python build.py ${{ secrets.ANTHROPIC_API_KEY && '--llm' || '' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - run: python apple.py
       - run: python render.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
