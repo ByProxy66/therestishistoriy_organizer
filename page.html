@@ -1,0 +1,151 @@
+<title>Rest Is History Series</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an archive catalogue. Year as a spine on the left, series as index rows that open into their parts. */
+:root {
+  --bg: #eef0ec; --surface: #f8f9f6; --fg: #1c2321; --muted: #5b6660; --line: #d2d8d1; --accent: #8f6312; --accent-soft: #efe3c8;
+  --display: "Young Serif", Georgia, "Times New Roman", serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #131816; --surface: #1a201d; --fg: #e5e9e3; --muted: #97a29b; --line: #2b3430; --accent: #d6a54e; --accent-soft: #3a3020; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #131816; --surface: #1a201d; --fg: #e5e9e3; --muted: #97a29b; --line: #2b3430; --accent: #d6a54e; --accent-soft: #3a3020; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--body); }
+.wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 80px; }
+header { display: grid; gap: 10px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 400 clamp(32px, 6vw, 52px)/1.05 var(--display); margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0; max-width: 62ch; }
+.stats { display: flex; flex-wrap: wrap; gap: 6px 22px; font: 14px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.stats b { color: var(--fg); font-weight: 500; }
+
+.controls { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; flex-wrap: wrap; gap: 10px; padding-block: 14px; border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+#q { flex: 1 1 240px; min-width: 0; font: 16px var(--body); padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); }
+#q:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: 600 14px var(--body); padding: 8px 14px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+
+.year { display: grid; grid-template-columns: 72px 1fr; gap: 0 20px; padding-top: 28px; }
+.year > h2 { font: 400 22px/1 var(--display); color: var(--accent); margin: 14px 0 0; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 70px); align-self: start; }
+.rows { min-width: 0; }
+.row { border-bottom: 1px solid var(--line); }
+.row > button { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: baseline; padding: 14px 4px; }
+.row > button:hover .name { color: var(--accent); }
+.name { font: 400 20px/1.25 var(--display); min-width: 0; }
+.meta { font: 13px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sub { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 14px; color: var(--muted); }
+.chip { font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; background: var(--accent-soft); color: var(--accent); }
+.chip.ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+ol.eps { list-style: none; margin: 0 0 18px; padding: 0 4px; display: grid; gap: 14px; }
+.ep { display: grid; grid-template-columns: 34px 1fr; gap: 0 12px; }
+.ep .pn { font: 500 13px/1.6 var(--mono); color: var(--accent); }
+.ep .et { font-weight: 600; }
+.ep p { margin: 2px 0 4px; color: var(--muted); font-size: 15px; max-width: 65ch; }
+.ep .em { font: 12px var(--mono); color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+.ep a { color: var(--accent); }
+.solo .row > button { grid-template-columns: 56px 1fr auto; }
+.solo .num { font: 13px var(--mono); color: var(--muted); }
+.solo .name { font: 600 16px/1.35 var(--body); }
+.empty { padding: 40px 0; color: var(--muted); }
+footer { margin-top: 48px; font-size: 13px; color: var(--muted); max-width: 65ch; }
+@media (max-width: 560px) {
+  .year { grid-template-columns: 1fr; }
+  .year > h2 { position: static; margin: 0 0 4px; }
+  .solo .row > button { grid-template-columns: 44px 1fr; }
+  .solo .meta { grid-column: 2; }
+}
+@media (prefers-reduced-motion: no-preference) { .row > button .name { transition: color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Uofficielt arkiv · The Rest Is History</span>
+    <h1>Alle serierne, samlet</h1>
+    <p class="lede">Afsnittene er grupperet automatisk ud fra podcastens RSS-feed. Flerdelte serier står samlet, og serier der er fortsat senere (fx Den Franske Revolution) er markeret som bind.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+  <div class="controls">
+    <label for="q" hidden>Søg</label>
+    <input id="q" type="search" placeholder="Søg i serier og afsnit, fx Napoleon" autocomplete="off">
+    <div class="seg" role="group" aria-label="Visning">
+      <button id="v-series" aria-pressed="true" data-v="series">Serier</button>
+      <button id="v-solo" aria-pressed="false" data-v="solo">Enkeltafsnit</button>
+    </div>
+  </div>
+  <main id="list"></main>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MONTH = ["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"];
+const fmt = d => { const [y,m,dd] = d.split("-"); return `${+dd}. ${MONTH[m-1]} ${y}`; };
+const span = (a,b) => { const A=a.split("-"), B=b.split("-"); return A[0]===B[0] ? `${MONTH[A[1]-1]}–${MONTH[B[1]-1]}`.replace(/^(\w+)–\1$/,"$1") : `${MONTH[A[1]-1]} ${A[0].slice(2)}–${MONTH[B[1]-1]} ${B[0].slice(2)}`; };
+let view = "series", open = new Set();
+try { view = localStorage.getItem("trih-view") || "series"; } catch (e) {}
+
+const inSeries = D.series.reduce((n,s)=>n+s.eps.length,0);
+$("#stats").innerHTML = `<span><b>${D.count}</b> afsnit i feedet</span><span><b>${D.series.length}</b> serier</span><span><b>${inSeries}</b> afsnit i serier</span><span>opdateret ${fmt(D.generated)}</span>`;
+$("#foot").textContent = "Lyd afspilles fra podcastens eget feed. Navne markeret “navngivet manuelt” er sat i en rettelsesfil; resten er udledt af afsnitstitlerne.";
+
+function epHTML(e, i) {
+  return `<li class="ep"><span class="pn">${e.p ? String(e.p).padStart(2,"0") : "·"}</span><div>
+    <div class="et">${esc(e.t)}</div><p>${esc(e.x)}</p>
+    <div class="em"><span>${fmt(e.d)}</span>${e.m ? `<span>${e.m} min</span>` : ""}${e.a ? `<a href="${esc(e.a)}" target="_blank" rel="noopener">Lyt ↗</a>` : ""}</div></div></li>`;
+}
+function match(q, ...xs) { return !q || xs.some(x => (x||"").toLowerCase().includes(q)); }
+
+function render() {
+  const q = $("#q").value.trim().toLowerCase();
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === view));
+  const list = $("#list"); list.className = view === "solo" ? "solo" : "";
+  const byYear = {};
+  if (view === "series") {
+    D.series.slice().reverse().forEach(s => {
+      const hit = match(q, s.name) || s.eps.some(e => match(q, e.t, e.x));
+      if (hit) (byYear[s.start.slice(0,4)] ??= []).push(s);
+    });
+  } else {
+    D.solo.slice().reverse().forEach(e => { if (match(q, e.t, e.x)) (byYear[e.d.slice(0,4)] ??= []).push(e); });
+  }
+  const years = Object.keys(byYear).sort().reverse();
+  if (!years.length) { list.innerHTML = `<p class="empty">Ingen ${view==="series"?"serier":"afsnit"} matcher “${esc(q)}”. Prøv et andet ord, eller skift visning.</p>`; return; }
+  list.innerHTML = years.map(y => `<section class="year"><h2>${y}</h2><div class="rows">${byYear[y].map(view==="series"?seriesRow:soloRow).join("")}</div></section>`).join("");
+}
+function seriesRow(s) {
+  const isOpen = open.has(s.id);
+  const chips = [s.saga ? `<span class="chip">Bind ${s.saga.index} af ${s.saga.of}</span>` : "", s.src === "override" ? `<span class="chip ghost">navngivet manuelt</span>` : ""].join("");
+  const range = `#${s.eps[0].n ?? "–"}–${s.eps.at(-1).n ?? "–"}`;
+  return `<div class="row"><button aria-expanded="${isOpen}" data-id="${esc(s.id)}">
+    <span class="name">${esc(s.name)}</span><span class="meta">${s.eps.length} dele</span>
+    <span class="sub"><span>${span(s.start, s.end)} · afsnit ${range}</span>${chips}</span></button>
+    ${isOpen ? `<ol class="eps">${s.eps.map(epHTML).join("")}</ol>` : ""}</div>`;
+}
+function soloRow(e) {
+  const id = "solo-" + e.d + e.t; const isOpen = open.has(id);
+  return `<div class="row"><button aria-expanded="${isOpen}" data-id="${esc(id)}">
+    <span class="num">${e.n ? "#"+e.n : (e.ty === "trailer" ? "trailer" : "bonus")}</span><span class="name">${esc(e.t.replace(/^\s*\d+[.:]\s*/,""))}</span><span class="meta">${fmt(e.d)}</span></button>
+    ${isOpen ? `<ol class="eps">${epHTML({...e, p: null})}</ol>` : ""}</div>`;
+}
+
+$("#list").addEventListener("click", ev => {
+  const b = ev.target.closest(".row > button"); if (!b) return;
+  const id = b.dataset.id; open.has(id) ? open.delete(id) : open.add(id); render();
+});
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  view = b.dataset.v; try { localStorage.setItem("trih-view", view); } catch (e) {} render();
+}));
+$("#q").addEventListener("input", render);
+render();
+</script>

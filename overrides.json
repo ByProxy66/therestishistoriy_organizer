@@ -1,0 +1,20 @@
+{
+  "_comment": "Manual corrections. Win over rules and LLM. 'names': series id -> name. 'drop': series ids to dissolve.",
+  "names": {
+    "x-12-days-coronation-of-charlemagne-and-the-collapse-of-the-so": "The 12 Days of Christmas",
+    "175-crucifixion": "Jesus and the Jewish Revolt",
+    "195-young-cleopatra": "Cleopatra",
+    "209-londinium": "London",
+    "214-the-battle-of-stalingrad": "The Battle of Stalingrad",
+    "218-theodora-empress-of-byzantium": "Justinian & Theodora",
+    "248-medieval-treason": "Treason",
+    "295-the-rise-of-the-nazis": "The Rise of the Nazis",
+    "310-ronald-reagan-and-the-american-dream": "Ronald Reagan",
+    "345-raiders-of-the-lost-ark": "The Ark & the Holy Grail",
+    "347-the-american-revolution": "The American Revolution",
+    "463-mad-elections": "Elections",
+    "677-usa-the-star-spangled-banner": "National Anthems",
+    "683-washington-hero-of-the-revolution": "The Founding Fathers"
+  },
+  "drop": []
+}
