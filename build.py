@@ -270,11 +270,14 @@ def main():
     for rec in series:
         write_series_rss(rec, OUT / "feeds" / f"{rec['id']}.xml")
 
-    src = {}
+        src = {}
     for s in series:
         src[s["name_source"]] = src.get(s["name_source"], 0) + 1
     print(f"{len(eps)} episodes, {len(series)} series covering {len(in_series)} episodes, "
           f"{len(standalone)} standalone. Name sources: {src}")
+    for s in series:
+        if s["name_source"] == "fallback":
+            print(f'  MANGLER NAVN: "{s["id"]}": "",   # {s["episodes"][0]["title"]}')
 
 
 if __name__ == "__main__":
