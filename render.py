@@ -34,7 +34,29 @@ HEAD = """<meta charset="utf-8">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#eef0ec" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131816" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="manifest" href="manifest.webmanifest">
 """
+
+# Icons + manifest (for Android / Chrome "Add to home screen")
+(ROOT / "out" / "icons").mkdir(parents=True, exist_ok=True)
+for name in ("apple-touch-icon.png", "favicon-32.png", "icon-192.png", "icon-512.png"):
+    src = ROOT / "icons" / name
+    if src.exists():
+        (ROOT / "out" / "icons" / name).write_bytes(src.read_bytes())
+(ROOT / "out" / "manifest.webmanifest").write_text(json.dumps({
+    "name": "The Rest Is History – Serier",
+    "short_name": "TRIH Serier",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#131816",
+    "theme_color": "#131816",
+    "icons": [
+        {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+        {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+    ],
+}, ensure_ascii=False, indent=1), encoding="utf-8")
 
 tpl = (ROOT / "page.html").read_text(encoding="utf-8")
 tpl = tpl.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False, separators=(",", ":")))
